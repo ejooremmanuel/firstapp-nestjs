@@ -10,8 +10,6 @@ export class UserController {
   }
   @Post()
   createUser(@Request() data: any): any {
-    console.log(data);
-
     const res = this.userService.insert(data.body);
     return {
       message: 'user added',
