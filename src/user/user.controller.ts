@@ -1,16 +1,26 @@
-import { Controller, Delete, Get, Param, Post, Request } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Request,
+} from '@nestjs/common';
 import { UserService } from './user.service';
+import { CreateUserDto } from './dto/create-user.dto';
+import { User } from './entities/user.entity';
 
 @Controller('user')
 export class UserController {
   constructor(private userService: UserService) {}
   @Get()
-  getUsers(): any[] {
+  getUsers(): User[] {
     return this.userService.findAll();
   }
   @Post()
-  createUser(@Request() data: any): any {
-    const res = this.userService.insert(data.body);
+  createUser(@Body() data: CreateUserDto): any {
+    const res = this.userService.insert(data);
     return {
       message: 'user added',
       success: true,
@@ -18,15 +28,15 @@ export class UserController {
     };
   }
   @Get(':id')
-  getUser(@Param('id') id: string): any {
-    const foundUser = this.userService.findById(parseInt(id));
+  getUser(@Param('id') id: string): User {
+    const foundUser = this.userService.findById(id);
     return foundUser;
   }
   @Delete(':id')
   deleteUser(@Param('id') id: string): any {
-    this.userService.deleteById(parseInt(id));
+    this.userService.deleteById(id);
     return {
-      message: 'User deleted',
+      message: 'user deleted',
     };
   }
 }
